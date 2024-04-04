@@ -9,16 +9,69 @@ abstract class Env {
   static String apiKey = _Env.apiKey;
 }
 
-class DiscoverMePage extends StatelessWidget {
+class DiscoverMePage extends StatefulWidget {
   const DiscoverMePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    talk("affiche moi un maximum d'emojis");
-    return const Center(child: Text('Discover Me'));
+  _DiscoverMePageState createState() => _DiscoverMePageState();
+}
+
+class _DiscoverMePageState extends State<DiscoverMePage> {
+  final TextEditingController _controller = TextEditingController();
+  Future<String>? _response;
+
+  void _getResponse() {
+    setState(() {
+      _response = talk(_controller.text);
+    });
   }
 
-  void talk(String input) async {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        TextField(
+          controller: _controller,
+          decoration: const InputDecoration(
+            hintText: 'Enter your message',
+          ),
+          onSubmitted: (String value) {
+            _getResponse();
+          },
+        ),
+        ElevatedButton(
+            onPressed: _getResponse,
+            child: const Text('Envoyer'),
+        ),
+      apiResponse(),
+      ],
+    );
+  }
+
+  FutureBuilder<String> apiResponse() {
+    return FutureBuilder<String>(
+    future: _response,
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return Container(
+          child: Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+      } else if (snapshot.hasError) {
+        return Center(child: Text('Error: ${snapshot.error}'));
+      } else {
+        return Container(
+          child: Center(
+            child: Text(snapshot.data?? ""),
+          ),
+        );
+      }
+    }
+  );
+  }
+
+  Future<String> talk(String input) async {
     OpenAI.apiKey = Env.apiKey;
     OpenAI.baseUrl = 'https://api.openai.com';
     // the system message that will be sent to the request.
@@ -56,6 +109,8 @@ class DiscoverMePage extends StatelessWidget {
       temperature: 0.2,
       maxTokens: 500,
     );
+    String text = chatCompletion.choices[0].message.content.toString();
     print(chatCompletion.choices[0].message.content);
+    return text;
   }
 }
