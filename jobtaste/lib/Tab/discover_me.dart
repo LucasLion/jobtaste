@@ -28,23 +28,26 @@ class _DiscoverMePageState extends State<DiscoverMePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TextField(
-          controller: _controller,
-          decoration: const InputDecoration(
-            hintText: 'Enter your message',
+    return Padding(
+      padding: const EdgeInsets.only(top: 50.0),
+      child: Column(
+        children: [
+          TextField(
+            controller: _controller,
+            decoration: const InputDecoration(
+              hintText: 'Enter your message',
+            ),
+            onSubmitted: (String value) {
+              _getResponse();
+            },
           ),
-          onSubmitted: (String value) {
-            _getResponse();
-          },
-        ),
-        ElevatedButton(
-            onPressed: _getResponse,
-            child: const Text('Envoyer'),
-        ),
-      apiResponse(),
-      ],
+          ElevatedButton(
+              onPressed: _getResponse,
+              child: const Text('Envoyer'),
+          ),
+        apiResponse(),
+        ],
+      ),
     );
   }
 
