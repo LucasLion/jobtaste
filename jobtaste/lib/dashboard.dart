@@ -62,7 +62,7 @@ class JobsOfWeekPage extends StatelessWidget {
   Card jobCard(String job) {
     return Card(
       child: SizedBox(
-        height: 400,
+        height: 300,
         width: 100,
         child: Column(
           children: <Widget>[
