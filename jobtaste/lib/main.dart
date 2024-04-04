@@ -69,15 +69,6 @@ class _JobTasteHomePageState extends State<_JobTasteHomePage>
   }
 }
 
-class JobsOfWeekPage extends StatelessWidget {
-  const JobsOfWeekPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Jobs of the Week'));
-  }
-}
-
 class DiscoverMePage extends StatelessWidget {
   const DiscoverMePage({super.key});
 

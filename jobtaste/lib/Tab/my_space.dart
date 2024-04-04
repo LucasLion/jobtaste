@@ -28,56 +28,16 @@ class _MySpacePageState extends State<MySpacePage> {
             ),
           ];
         },
-        body: TabBarView(
+        body: const TabBarView(
           children: <Widget>[
             // Contenu pour l'onglet "Succès"
-            _buildSuccessTab(),
+            Center(child: Text('Contenu pour Succès')),
             // Contenu pour l'onglet "Favoris"
-            const Center(child: Text('Contenu pour Favoris')),
+            Center(child: Text('Contenu pour Favoris')),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildSuccessTab() {
-    // Cette fonction construit l'onglet "Succès"
-    return Column(
-      children: [
-        Expanded(
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: const [
-              // Ajouter des widgets pour chaque succès ici
-              Card(child: ListTile(title: Text('Succès 1'))),
-              Card(child: ListTile(title: Text('Succès 2'))),
-              Card(child: ListTile(title: Text('Succès 3'))),
-            ],
-          ),
-        ),
-        Expanded(
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: const [
-              // Ajouter des widgets pour chaque stat spécifique ici
-              Card(child: ListTile(title: Text('Stat Spécifique 1'))),
-              Card(child: ListTile(title: Text('Stat Spécifique 2'))),
-              Card(child: ListTile(title: Text('Stat Spécifique 3'))),
-            ],
-          ),
-        ),
-        Expanded(
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: const [
-              // Ajouter des widgets pour chaque stat générique ici
-              Card(child: ListTile(title: Text('Stat Générique 1'))),
-              Card(child: ListTile(title: Text('Stat Générique 2'))),
-              Card(child: ListTile(title: Text('Stat Générique 3'))),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
 }
