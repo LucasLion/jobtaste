@@ -73,9 +73,8 @@ class JobsOfWeekPage extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Card(
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height / 3,
-            width: MediaQuery.of(context).size.width / 2,
+          child: AspectRatio(
+            aspectRatio: 0.6,
             child: Column(
               children: <Widget>[
                 Padding(
