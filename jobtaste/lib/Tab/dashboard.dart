@@ -80,24 +80,16 @@ class JobsOfWeekPage extends StatelessWidget {
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Expanded(
-                    flex: 5,
-                    child: Image.asset('assets/images/image.jpg')),
+                  child: Image.asset('assets/images/image.jpg'),
                 ),
-                Expanded(
-                  flex: 1,
-                  child: Text(job)
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Add your onPressed code here!
-                      },
-                      child: const Text('Decouvrir'),
-                    ),
+                Text(job),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Add your onPressed code here!
+                    },
+                    child: const Text('Decouvrir'),
                   ),
                 )
               ],
@@ -107,5 +99,4 @@ class JobsOfWeekPage extends StatelessWidget {
       ),
     );
   }
-
 }
