@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jobtaste/Tab/my_space.dart';
 import 'Tab/dashboard.dart';
+import 'Tab/discover_me.dart';
 
 void main() {
   runApp(const JobTasteApp());
@@ -69,14 +70,7 @@ class _JobTasteHomePageState extends State<_JobTasteHomePage>
   }
 }
 
-class DiscoverMePage extends StatelessWidget {
-  const DiscoverMePage({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Discover Me'));
-  }
-}
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});

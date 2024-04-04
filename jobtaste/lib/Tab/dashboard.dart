@@ -1,7 +1,5 @@
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'filter_page.dart';
 
 class JobsOfWeekPage extends StatelessWidget {
   const JobsOfWeekPage({super.key});
@@ -10,7 +8,7 @@ class JobsOfWeekPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       children: <Widget>[
-        searchBar(),
+        searchBar(context),
         category(context, 'Metiers de la semaine', Icons.push_pin, 'Comptables', 'Mecaniciens'),
         category(context, 'Recommandations', Icons.recommend, 'Laboratoire', 'Agent immobilier'),
         category(context, 'Metiers les plus populaires', Icons.star, 'Electricien', 'Pompiers'),
@@ -19,22 +17,37 @@ class JobsOfWeekPage extends StatelessWidget {
     );
   }
 
-  Row searchBar() {
+  Row searchBar(BuildContext context) {
     return Row(
         children: <Widget>[
-          const Expanded(
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: 'Search...',
-                prefixIcon: Icon(Icons.search),
-                border: InputBorder.none,
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(
+                left: 12.0,
+                top: 12.0,
+                bottom: 12.0,
+              ),
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: 'Barre de recherche',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide.none,
+                  ),
+                  fillColor: Colors.grey[300],
+                  filled: true,
+                ),
               ),
             ),
           ),
           IconButton(
-            icon: const Icon(Icons.filter_list),
+            icon: const Icon(Icons.filter_alt),
             onPressed: () {
-            },
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const FilterPage()),
+              );
+            }
           ),
         ],
       );

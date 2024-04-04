@@ -23,41 +23,7 @@ class _MySpacePageState extends State<MySpacePage>
                 scrollDirection: Axis.horizontal,
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
-                  return Card(
-                    margin: const EdgeInsets.all(8),
-                    clipBehavior: Clip
-                        .antiAlias, // Assure que tout contenu débordant est coupé
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    child: Container(
-                      width: 160,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: NetworkImage(snapshot.data![index]),
-                          fit: BoxFit
-                              .cover, // Remplit l'espace tout en conservant les proportions de l'image
-                        ),
-                      ),
-                      child: Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Container(
-                          width: double.infinity,
-                          color: Colors.black.withOpacity(0.5),
-                          padding: const EdgeInsets.all(5),
-                          child: Text(
-                            searchTerm,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
+                  return buildCard(snapshot, index, searchTerm);
                 },
               );
             } else {
@@ -69,6 +35,44 @@ class _MySpacePageState extends State<MySpacePage>
         },
       ),
     );
+  }
+
+  Card buildCard(AsyncSnapshot<List<String>> snapshot, int index, String searchTerm) {
+    return Card(
+                  margin: const EdgeInsets.all(8),
+                  clipBehavior: Clip
+                      .antiAlias, // Assure que tout contenu débordant est coupé
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: Container(
+                    width: 160,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: NetworkImage(snapshot.data![index]),
+                        fit: BoxFit
+                            .cover, // Remplit l'espace tout en conservant les proportions de l'image
+                      ),
+                    ),
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        width: double.infinity,
+                        color: Colors.black.withOpacity(0.5),
+                        padding: const EdgeInsets.all(5),
+                        child: Text(
+                          searchTerm,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
   }
 
   @override
