@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jobtaste/Tab/my_space.dart';
 
 void main() {
   runApp(const JobTasteApp());
@@ -25,8 +26,8 @@ class _JobTasteHomePage extends StatefulWidget {
   _JobTasteHomePageState createState() => _JobTasteHomePageState();
 }
 
-class _JobTasteHomePageState extends State<_JobTasteHomePage> 
-    with SingleTickerProviderStateMixin{
+class _JobTasteHomePageState extends State<_JobTasteHomePage>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -44,30 +45,26 @@ class _JobTasteHomePageState extends State<_JobTasteHomePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('JobTaste'),
-      ),
-      body: TabBarView(
-        controller: _tabController,
-        children: const <Widget>[
-          JobsOfWeekPage(), // Page for Jobs of the Week
-          MySpacePage(), // Page for My Space
-          DiscoverMePage(), // Page for Discover Me
-          ProfilePage(), // Page for Profile
-        ],
-      ),
-      bottomNavigationBar: BottomAppBar(
-        child: TabBar(
+        body: TabBarView(
           controller: _tabController,
-          tabs: const [
-            Tab(icon: Icon(Icons.home)),
-            Tab(icon: Icon(Icons.search)),
-            Tab(icon: Icon(Icons.favorite)),
-            Tab(icon: Icon(Icons.person)),
+          children: const <Widget>[
+            JobsOfWeekPage(),
+            MySpacePage(),
+            DiscoverMePage(),
+            ProfilePage(), 
           ],
         ),
-      )
-    );
+        bottomNavigationBar: BottomAppBar(
+          child: TabBar(
+            controller: _tabController,
+            tabs: const [
+              Tab(icon: Icon(Icons.home)),
+              Tab(icon: Icon(Icons.search)),
+              Tab(icon: Icon(Icons.favorite)),
+              Tab(icon: Icon(Icons.person)),
+            ],
+          ),
+        ));
   }
 }
 
@@ -77,15 +74,6 @@ class JobsOfWeekPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Center(child: Text('Jobs of the Week'));
-  }
-}
-
-class MySpacePage extends StatelessWidget {
-  const MySpacePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('My Space'));
   }
 }
 
