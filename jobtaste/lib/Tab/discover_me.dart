@@ -14,11 +14,11 @@ class DiscoverMePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    init();
+    talk("affiche moi un maximum d'emojis");
     return const Center(child: Text('Discover Me'));
   }
 
-  void init() async {
+  void talk(String input) async {
     OpenAI.apiKey = Env.apiKey;
     OpenAI.baseUrl = 'https://api.openai.com';
     // the system message that will be sent to the request.
@@ -35,7 +35,7 @@ class DiscoverMePage extends StatelessWidget {
     final userMessage = OpenAIChatCompletionChoiceMessageModel(
       content: [
         OpenAIChatCompletionChoiceMessageContentItemModel.text(
-          "Dessine moi un maximum d'emojis",
+          input,
         ),
       ],
       role: OpenAIChatMessageRole.user,
@@ -56,10 +56,6 @@ class DiscoverMePage extends StatelessWidget {
       temperature: 0.2,
       maxTokens: 500,
     );
-
-    print(chatCompletion.choices.first.message); // ...
-    print(chatCompletion.systemFingerprint); // ...
-    print(chatCompletion.usage.promptTokens); // ...
-    print(chatCompletion.id); // ...
+    print(chatCompletion.choices[0].message.content);
   }
 }
