@@ -11,8 +11,64 @@ class MySpacePage extends StatefulWidget {
 class _MySpacePageState extends State<MySpacePage>
     with SingleTickerProviderStateMixin {
 
-  void jobImages(String job) async {
-    fetchJobImages(job);
+  Widget buildImageListView(String searchTerm) {
+    return SizedBox(
+      height: 200,
+      child: FutureBuilder<List<String>>(
+        future: fetchJobImages(searchTerm),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    margin: const EdgeInsets.all(8),
+                    clipBehavior: Clip
+                        .antiAlias, // Assure que tout contenu débordant est coupé
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    child: Container(
+                      width: 160,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: NetworkImage(snapshot.data![index]),
+                          fit: BoxFit
+                              .cover, // Remplit l'espace tout en conservant les proportions de l'image
+                        ),
+                      ),
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          width: double.infinity,
+                          color: Colors.black.withOpacity(0.5),
+                          padding: const EdgeInsets.all(5),
+                          child: Text(
+                            searchTerm,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              );
+            } else {
+              return const Center(child: Text('Aucune image trouvée.'));
+            }
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
+    );
   }
 
   @override
@@ -39,10 +95,7 @@ class _MySpacePageState extends State<MySpacePage>
         body: TabBarView(
           children: <Widget>[
             // Contenu pour l'onglet "Succès"
-            Center(
-                child: FloatingActionButton(
-                    onPressed: () => jobImages("engineer"),
-                    child: const Icon(Icons.add))),
+            const Center(child: Text('Succès')),
             // Contenu pour l'onglet "Favoris"
             _buildFavorisTab(),
           ],
@@ -70,24 +123,9 @@ class _MySpacePageState extends State<MySpacePage>
               ),
             ),
           ),
-          SizedBox(
-            height: 150, // Hauteur fixe pour la ListView
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: 10,
-              itemBuilder: (context, index) {
-                return Card(
-                  margin: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    width: 150,
-                    child: ListTile(
-                      title: Text('Favoris $index'),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
+          const SizedBox(height: 10),
+          buildImageListView('engineer'),
+          const SizedBox(height: 40),
 
           // Section pour "Simulation réalisées"
           const Padding(
@@ -103,24 +141,9 @@ class _MySpacePageState extends State<MySpacePage>
               ),
             ),
           ),
-          SizedBox(
-            height: 150, // Hauteur fixe pour la ListView
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: 10,
-              itemBuilder: (context, index) {
-                return Card(
-                  margin: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    width: 150,
-                    child: ListTile(
-                      title: Text('Simulation réalisées $index'),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
+          const SizedBox(height: 10),
+          buildImageListView('doctor'),
+          const SizedBox(height: 40),
 
           // Section pour "Métier explorés"
           const Padding(
@@ -135,24 +158,8 @@ class _MySpacePageState extends State<MySpacePage>
               ),
             ),
           ),
-          SizedBox(
-            height: 150, // Hauteur fixe pour la ListView
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: 10,
-              itemBuilder: (context, index) {
-                return Card(
-                  margin: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    width: 150,
-                    child: ListTile(
-                      title: Text('Métier explorés $index'),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
+          const SizedBox(height: 10),
+          buildImageListView('teacher'),
         ],
       ),
     );
