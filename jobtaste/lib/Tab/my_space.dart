@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class MySpacePage extends StatefulWidget {
   const MySpacePage({super.key});
@@ -7,7 +8,8 @@ class MySpacePage extends StatefulWidget {
   State<MySpacePage> createState() => _MySpacePageState();
 }
 
-class _MySpacePageState extends State<MySpacePage> {
+class _MySpacePageState extends State<MySpacePage> 
+  with SingleTickerProviderStateMixin{
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -15,8 +17,9 @@ class _MySpacePageState extends State<MySpacePage> {
       child: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return const <Widget>[
-           SliverAppBar(
+            SliverAppBar(
               title: Text('Mon Espace'),
+              centerTitle: true,
               pinned: true,
               floating: true,
               bottom: TabBar(
@@ -28,16 +31,120 @@ class _MySpacePageState extends State<MySpacePage> {
             ),
           ];
         },
-        body: const TabBarView(
+        body: TabBarView(
           children: <Widget>[
             // Contenu pour l'onglet "Succès"
-            Center(child: Text('Contenu pour Succès')),
+            const Center(child: Text('Contenu pour Succès')),
             // Contenu pour l'onglet "Favoris"
-            Center(child: Text('Contenu pour Favoris')),
+            _buildFavorisTab(),
           ],
         ),
       ),
     );
   }
+
+Widget _buildFavorisTab() {
+  return SingleChildScrollView( // Permet le défilement vertical de l'ensemble du contenu
+    child: Column(
+      children: [
+        // Section pour "Favoris"
+        const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Row(
+              children: [
+                Icon(Icons.collections_bookmark, color: Colors.amber, size: 30),
+                Text('Favoris', style: TextStyle(fontSize: 24)),
+              ],
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 150, // Hauteur fixe pour la ListView
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: 10,
+            itemBuilder: (context, index) {
+              return Card(
+                margin: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  width: 150,
+                  child: ListTile(
+                    title: Text('Favoris $index'),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+        
+        // Section pour "Simulation réalisées"
+        const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Row(
+              children: [
+                Icon(Icons.check_circle_outline, color: Colors.amber, size: 30),
+                Text('Simulation réalisées', style: TextStyle(fontSize: 24)),
+              ],
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 150, // Hauteur fixe pour la ListView
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: 10,
+            itemBuilder: (context, index) {
+              return Card(
+                margin: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  width: 150,
+                  child: ListTile(
+                    title: Text('Simulation réalisées $index'),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+        
+        // Section pour "Métier explorés"
+        const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Row(
+              children: [
+                Icon(Icons.event_available, color: Colors.amber, size: 30),
+                Text('Métier explorés', style: TextStyle(fontSize: 24))
+              ],
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 150, // Hauteur fixe pour la ListView
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: 10,
+            itemBuilder: (context, index) {
+              return Card(
+                margin: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  width: 150,
+                  child: ListTile(
+                    title: Text('Métier explorés $index'),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    ),
+  );
+}
 
 }
