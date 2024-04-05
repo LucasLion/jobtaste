@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jobtaste/Tab/my_space.dart';
 import 'Tab/dashboard.dart';
-import 'Tab/discover_me.dart';
+import 'Tab/discover_me/discover_me.dart';
 
 void main() {
   runApp(const JobTasteApp());

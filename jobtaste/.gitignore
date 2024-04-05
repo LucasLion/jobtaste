@@ -43,4 +43,4 @@ app.*.map.json
 /android/app/release
 
 .env
-/lib/Tab/discover_me.g.dart
+/lib/Tab/discover_me/discover_me.g.dart

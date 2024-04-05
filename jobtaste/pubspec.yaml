@@ -39,6 +39,7 @@ dependencies:
   envied: ^0.5.4+1
   dart_openai: ^5.1.0
   envied_generator: ^0.5.4+1
+  chat_bubbles: ^1.6.0
 
 dev_dependencies:
   flutter_test:

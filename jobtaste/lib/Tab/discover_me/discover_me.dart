@@ -97,10 +97,19 @@ class _DiscoverMePageState extends State<DiscoverMePage> {
       role: OpenAIChatMessageRole.user,
     );
 
+    final whoAreYou = OpenAIChatCompletionChoiceMessageModel(
+      content: [
+        OpenAIChatCompletionChoiceMessageContentItemModel.text(
+            "je souhaite spécialiser mon agent IA dans le domaine de l'éducation afin de le transformer en un conseiller d'orientation virtuel. Je fournirai des exemples de questions courantes posées par les étudiants, ainsi que des réponses pertinentes et des conseils d'orientation basés sur des données probantes. L'objectif est que l'agent IA puisse fournir des recommandations personnalisées sur les choix de carrière, les programmes d'études, les options universitaires, et aider les étudiants à prendre des décisions éclairées sur leur avenir académique et professionnel. Merci de personnaliser le modèle pour qu'il acquière une compréhension approfondie des parcours éducatifs et des besoins des étudiants.",
+        ),
+      ],
+      role: OpenAIChatMessageRole.assistant,
+    );
 // all messages to be sent.
     final requestMessages = [
       systemMessage,
       userMessage,
+      whoAreYou,
     ];
 
 // the actual request.
