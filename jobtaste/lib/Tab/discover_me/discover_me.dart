@@ -13,12 +13,32 @@ class DiscoverMePage extends StatefulWidget {
   const DiscoverMePage({super.key});
 
   @override
-  _DiscoverMePageState createState() => _DiscoverMePageState();
+  DiscoverMePageState createState() => DiscoverMePageState();
 }
 
-class _DiscoverMePageState extends State<DiscoverMePage> {
+class DiscoverMePageState extends State<DiscoverMePage> {
   final TextEditingController _controller = TextEditingController();
   Future<String>? _response;
+  final List<OpenAIChatCompletionChoiceMessageModel> _messageHistory = [];
+
+  // Cette méthode initialise le contexte du conseiller d'orientation.
+  void initializeContext() {
+    final initMessage = OpenAIChatCompletionChoiceMessageModel(
+      content: [
+        OpenAIChatCompletionChoiceMessageContentItemModel.text(
+          "Bonjour, je suis votre conseiller d'orientation virtuel. Je suis ici pour répondre à vos questions sur les carrières et les études.",
+        ),
+      ],
+      role: OpenAIChatMessageRole.assistant,
+    );
+    _messageHistory.add(initMessage);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initializeContext(); // Initialiser le contexte au démarrage de l'app.
+  }
 
   void _getResponse() {
     setState(() {
@@ -42,10 +62,10 @@ class _DiscoverMePageState extends State<DiscoverMePage> {
             },
           ),
           ElevatedButton(
-              onPressed: _getResponse,
-              child: const Text('Envoyer'),
+            onPressed: _getResponse,
+            child: const Text('Envoyer'),
           ),
-        apiResponse(),
+          apiResponse(),
         ],
       ),
     );
@@ -53,76 +73,55 @@ class _DiscoverMePageState extends State<DiscoverMePage> {
 
   FutureBuilder<String> apiResponse() {
     return FutureBuilder<String>(
-    future: _response,
-    builder: (context, snapshot) {
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        return Container(
-          child: Center(
-            child: CircularProgressIndicator(),
-          ),
-        );
-      } else if (snapshot.hasError) {
-        return Center(child: Text('Error: ${snapshot.error}'));
-      } else {
-        return Container(
-          child: Center(
-            child: Text(snapshot.data?? ""),
-          ),
-        );
-      }
-    }
-  );
+        future: _response,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else {
+            return Center(
+              child: Text(snapshot.data ?? ""),
+            );
+          }
+        });
   }
 
   Future<String> talk(String input) async {
     OpenAI.apiKey = Env.apiKey;
     OpenAI.baseUrl = 'https://api.openai.com';
-    // the system message that will be sent to the request.
-    final systemMessage = OpenAIChatCompletionChoiceMessageModel(
-      content: [
-        OpenAIChatCompletionChoiceMessageContentItemModel.text(
-          "return any message you are given as JSON.",
-        ),
-      ],
-      role: OpenAIChatMessageRole.assistant,
-    );
 
-    // the user message that will be sent to the request.
+    // Ajouter le message de l'utilisateur à l'historique.
     final userMessage = OpenAIChatCompletionChoiceMessageModel(
       content: [
-        OpenAIChatCompletionChoiceMessageContentItemModel.text(
-          input,
-        ),
+        OpenAIChatCompletionChoiceMessageContentItemModel.text(input),
       ],
       role: OpenAIChatMessageRole.user,
     );
+    _messageHistory.add(userMessage);
 
-    final whoAreYou = OpenAIChatCompletionChoiceMessageModel(
-      content: [
-        OpenAIChatCompletionChoiceMessageContentItemModel.text(
-            "je souhaite spécialiser mon agent IA dans le domaine de l'éducation afin de le transformer en un conseiller d'orientation virtuel. Je fournirai des exemples de questions courantes posées par les étudiants, ainsi que des réponses pertinentes et des conseils d'orientation basés sur des données probantes. L'objectif est que l'agent IA puisse fournir des recommandations personnalisées sur les choix de carrière, les programmes d'études, les options universitaires, et aider les étudiants à prendre des décisions éclairées sur leur avenir académique et professionnel. Merci de personnaliser le modèle pour qu'il acquière une compréhension approfondie des parcours éducatifs et des besoins des étudiants.",
-        ),
-      ],
-      role: OpenAIChatMessageRole.assistant,
+    // Envoyer la requête avec l'historique des messages.
+    OpenAIChatCompletionModel chatCompletion =
+        await OpenAI.instance.chat.create(
+      model: "gpt-3.5-turbo",
+      messages: _messageHistory,
+      temperature: 0.5,
+      maxTokens: 250,
     );
-// all messages to be sent.
-    final requestMessages = [
-      systemMessage,
-      userMessage,
-      whoAreYou,
-    ];
 
-// the actual request.
-    OpenAIChatCompletionModel chatCompletion = await OpenAI.instance.chat.create(
-      model: "gpt-3.5-turbo-1106",
-      responseFormat: {"type": "json_object"},
-      seed: 6,
-      messages: requestMessages,
-      temperature: 0.2,
-      maxTokens: 500,
+    // Ajouter la réponse de l'API à l'historique.
+    String responseText = chatCompletion.choices[0].message.content.toString();
+    _messageHistory.add(
+      OpenAIChatCompletionChoiceMessageModel(
+        content: [
+          OpenAIChatCompletionChoiceMessageContentItemModel.text(responseText),
+        ],
+        role: OpenAIChatMessageRole.assistant,
+      ),
     );
-    String text = chatCompletion.choices[0].message.content.toString();
-    print(chatCompletion.choices[0].message.content);
-    return text;
+
+    return responseText;
   }
 }
